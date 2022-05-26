@@ -1,7 +1,7 @@
 # DataPipeline
 
 Project Description:
-Perform sentiment analysis using NLP to study the sentiments of the general public towards cryptocurrency as a whole.
+Perform sentiment analysis using NLP to study the sentiments of the general public in Singapore towards cryptocurrency.
 
 Crypto involved (Top 10 by mCap excluding stablecoin):
 
