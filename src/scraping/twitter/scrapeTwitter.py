@@ -33,7 +33,7 @@ def scrapeToCsv(keywordList, start, end, tweet_limit):
     tweets = tweets.drop_duplicates()
     tweets = tweets.replace(r'\n',' ', regex=True)
     print(tweets.head(10))
-    tweets.to_csv(filepath + '/merged.csv', index=False)
+    tweets.to_csv('/home/randyubuntu/git/DataPipeline/src/scraping/csvFiles' + '/merged.csv', index=False)
     saveToDb(tweets, 'twitter_raw')
     return True
     

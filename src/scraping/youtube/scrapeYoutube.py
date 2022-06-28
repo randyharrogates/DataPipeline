@@ -67,7 +67,11 @@ def scrapeWithKeywords(kw_list):
         search_keywords(items, count)
     
     #combine all csv into one
-    
+    df = pd.concat(map(pd.read_csv, glob.glob('/home/randyubuntu/git/DataPipeline/src/scraping/youtube/csvFiles/*.csv')))
+    df = df.drop_duplicates()
+    df = df.replace(r'\n',' ', regex=True)
+    df.to_csv('/home/randyubuntu/git/DataPipeline/src/scraping/csvFiles' + '/mergedYoutube.csv', index=False)
+    return True
         
 
     
