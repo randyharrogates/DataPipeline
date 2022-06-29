@@ -55,7 +55,7 @@ def search_keywords(items, count):
         channel_df.append({'published_date':pd.DataFrame(published_dates)})
         channel_df.append({'description':pd.DataFrame(descriptions)})
     channel_df
-    doc_name = "/home/randyubuntu/git/DataPipeline/src/scraping/youtube/csvFiles/" + "vidWithKeyword" + str(count) + ".csv"
+    doc_name = "/home/randyubuntu/git/DataPipeline/src/scraping/youtube/dataFiles/" + "vidWithKeyword" + str(count) + ".csv"
     channel_df.to_csv(doc_name, index=False)
     return channel_df
 
@@ -79,11 +79,11 @@ def scrapeWithKeywords(kw_list):
         search_keywords(items, count)
     
     #combine all csv into one
-    df = pd.concat(map(pd.read_csv, glob.glob('/home/randyubuntu/git/DataPipeline/src/scraping/youtube/csvFiles/*.csv')))
+    df = pd.concat(map(pd.read_csv, glob.glob('/home/randyubuntu/git/DataPipeline/src/scraping/youtube/dataFiles/*.csv')))
     df = df.drop_duplicates()
     df = df.replace(r'\n',' ', regex=True)
     saveToDb(df, 'youtube_raw')
-    df.to_csv('/home/randyubuntu/git/DataPipeline/src/scraping/csvFiles' + '/mergedYoutube.csv', index=False)
+    df.to_csv('/home/randyubuntu/git/DataPipeline/src/scraping/dataFiles' + '/mergedYoutube.csv', index=False)
     return True
 
 def saveToDb(df, title):

@@ -78,8 +78,7 @@ class Scrape_subreddit:
 
 
 def writeToCSV(df):
-    filepath = os.path.join(ROOT_DIR , 'csvFiles')
-    df.to_csv('/home/randyubuntu/git/DataPipeline/src/scraping/csvFiles' + '/mergedReddit.csv', sep='|', index=False,encoding='utf-8')
+    df.to_csv('/home/randyubuntu/git/DataPipeline/src/scraping/dataFiles' + '/mergedReddit.csv', sep='|', index=False,encoding='utf-8')
     
 def saveToDb(df, title):
     #to save to postgres directly
