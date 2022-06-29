@@ -8,6 +8,11 @@ from googleapiclient.discovery import build
 import pandas as pd
 import glob
 from sqlalchemy import create_engine
+import base64
+
+postgrespw = 'cGFzc3dvcmQx'
+API_KEY = 'QUl6YVN5Q0J0Rm5LZjBfaWk0VVJDSTJqVk9GbGNEeU1Wd1d1YWlF'
+
 
 def search_keywords(items, count):
     channel_df = pd.DataFrame()
@@ -42,13 +47,13 @@ def search_keywords(items, count):
         channel_df.append({'published_date':pd.DataFrame(published_dates)})
         channel_df.append({'description':pd.DataFrame(descriptions)})
     channel_df
-    doc_name = "/home/randyubuntu/git/DataPipeline/src/scraping/youtube/csvFiles/" + "compilation of videos per keyword" + str(count) + ".csv"
+    doc_name = "/home/randyubuntu/git/DataPipeline/src/scraping/youtube/csvFiles/" + "vidWithKeyword" + str(count) + ".csv"
     channel_df.to_csv(doc_name, index=False)
     return channel_df
 
 
 def scrapeWithKeywords(kw_list):
-    api_key="AIzaSyCBtFnKf0_ii4URCI2jVOFlcDyMVwWuaiE"
+    api_key= base64.b64decode(API_KEY).decode("utf-8")
     api_service_name = "youtube"
     api_version = "v3"
     
@@ -75,7 +80,7 @@ def scrapeWithKeywords(kw_list):
 
 def saveToDb(df, title):
     #to save to postgres directly
-    engine = create_engine('postgresql://postgres:password1@localhost:5432/test')
+    engine = create_engine(f'postgresql://postgres:{base64.b64decode(postgrespw).decode("utf-8")}@localhost:5432/test')
     df.to_sql(title, engine, if_exists='replace',index=False)
 
     

@@ -5,11 +5,10 @@ import itertools
 import os
 import glob
 from pathlib import Path
+import base64
 
-
-
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-filepath = os.path.join(ROOT_DIR , 'csvFiles')
+postgrespw = 'cGFzc3dvcmQx'
+print(base64.b64encode(postgrespw.encode("utf-8")))
 
 def search_by_keywords(keyword, start, end, tweet_limit):
     '''
@@ -39,7 +38,7 @@ def scrapeToCsv(keywordList, start, end, tweet_limit):
     
 def saveToDb(df, title):
     #to save to postgres directly
-    engine = create_engine('postgresql://postgres:password1@localhost:5432/test')
+    engine = create_engine(f'postgresql://postgres:{base64.b64decode(postgrespw).decode("utf-8")}@localhost:5432/test')
     df.to_sql(title, engine, if_exists='replace',index=False)
     
 

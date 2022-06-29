@@ -1,4 +1,5 @@
 
+from email.mime import base
 import numpy as np  # linear algebra
 import pandas as pd  # data processing, CSV file I/O (e.g. pd.read_csv)
 import praw
@@ -6,8 +7,13 @@ import datetime as dt
 from sqlalchemy import create_engine
 import io
 import os
+import base64
 
 
+clientId = 'Y3VEaXRTT1hjd1VGSnhBQlRRUjkzUQ=='
+password='SGFycm9nYXRlc0BAMTEy'
+client_secret='Qk4tZGhNUDA0aDloQVFCNlpYemZ1aTRrdTdmYVpR'
+postgrespw = 'cGFzc3dvcmQx'
 
 
 
@@ -70,7 +76,7 @@ def writeToCSV(df):
     
 def saveToDb(df, title):
     #to save to postgres directly
-    engine = create_engine('postgresql://postgres:password1@localhost:5432/test')
+    engine = create_engine(f'postgresql://postgres:{base64.b64decode(postgrespw).decode("utf-8")}@localhost:5432/test')
     df.to_sql(title, engine, if_exists='replace',index=False)
 
 def scrape(reddit,subreddit,tag,limit):
@@ -81,11 +87,12 @@ def scrape(reddit,subreddit,tag,limit):
 
 def scrapeMultipleData(subreddit,tagList,limit,**kwargs):
     # Creating a reddit crawler object - your own user name and password
-    reddit = praw.Reddit(client_id='cuDitSOXcwUFJxABTQR93Q',
-                        client_secret='BN-dhMP04h9hAQB6ZXzfui4ku7faZQ',
+    
+    reddit = praw.Reddit(client_id=base64.b64decode(clientId).decode("utf-8"),
+                        client_secret=base64.b64decode(client_secret).decode("utf-8"),
                         user_agent='jamiescrapes',
                         username='JamieRan112',
-                        password='Harrogates@@112')
+                        password=base64.b64decode(password).decode("utf-8"))
     
     print(reddit.user.me())
     
@@ -99,5 +106,6 @@ def scrapeMultipleData(subreddit,tagList,limit,**kwargs):
     saveToDb(finalDf, 'reddit_raw')
     print(f'CSV file for reddit created {finalDf.head()}')
     return True
+
 
 

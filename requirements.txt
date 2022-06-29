@@ -1,5 +1,6 @@
 async-generator==1.10
 attrs==21.4.0
+bcrypt==3.2.2
 beautifulsoup4==4.11.1
 cachetools==5.2.0
 certifi==2022.6.15
