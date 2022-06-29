@@ -18,3 +18,5 @@ def scrapeAll(keywords):
     scrapeMultipleData('singapore', keywords, 1000)
     scrapeToCsv(keywordList=keywords, start = '2021-12-31', end='2022-12-31', tweet_limit=1000)
     scrapeWithKeywords(keywords)
+    
+scrapeAll(keywords=keywords)

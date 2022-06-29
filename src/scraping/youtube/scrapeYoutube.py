@@ -7,8 +7,7 @@ import googleapiclient.errors
 from googleapiclient.discovery import build
 import pandas as pd
 import glob
-
-
+from sqlalchemy import create_engine
 
 def search_keywords(items, count):
     channel_df = pd.DataFrame()
@@ -59,7 +58,7 @@ def scrapeWithKeywords(kw_list):
     for kw in kw_list:
         count+=1
         request = youtube.search().list(part="snippet", q=kw, type='video', 
-                                        publishedAfter='2020-01-01T00:00:00Z', maxResults=50)
+                                        publishedAfter='2020-01-01T00:00:00Z', maxResults=100)
 
         response = request.execute()
         items = response['items']
@@ -70,9 +69,14 @@ def scrapeWithKeywords(kw_list):
     df = pd.concat(map(pd.read_csv, glob.glob('/home/randyubuntu/git/DataPipeline/src/scraping/youtube/csvFiles/*.csv')))
     df = df.drop_duplicates()
     df = df.replace(r'\n',' ', regex=True)
+    saveToDb(df, 'youtube_raw')
     df.to_csv('/home/randyubuntu/git/DataPipeline/src/scraping/csvFiles' + '/mergedYoutube.csv', index=False)
     return True
-        
+
+def saveToDb(df, title):
+    #to save to postgres directly
+    engine = create_engine('postgresql://postgres:password1@localhost:5432/test')
+    df.to_sql(title, engine, if_exists='replace',index=False)
 
     
 # scrapeAll()

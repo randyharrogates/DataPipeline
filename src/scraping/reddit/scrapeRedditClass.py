@@ -6,7 +6,7 @@ import datetime as dt
 from sqlalchemy import create_engine
 import io
 import os
-from definitions import ROOT_DIR
+
 
 
 
@@ -66,7 +66,7 @@ class Scrape_subreddit:
 
 def writeToCSV(df):
     filepath = os.path.join(ROOT_DIR , 'csvFiles')
-    df.to_csv(filepath + '/reddit' + '.csv', sep='|', index=False,encoding='utf-8')
+    df.to_csv('/home/randyubuntu/git/DataPipeline/src/scraping/csvFiles' + '/mergedReddit.csv', sep='|', index=False,encoding='utf-8')
     
 def saveToDb(df, title):
     #to save to postgres directly
@@ -100,4 +100,4 @@ def scrapeMultipleData(subreddit,tagList,limit,**kwargs):
     print(f'CSV file for reddit created {finalDf.head()}')
     return True
 
-print(ROOT_DIR)
+
