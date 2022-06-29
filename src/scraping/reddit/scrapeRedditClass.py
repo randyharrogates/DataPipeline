@@ -8,12 +8,19 @@ from sqlalchemy import create_engine
 import io
 import os
 import base64
+import sys
+import inspect
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir) 
 
 
-clientId = 'Y3VEaXRTT1hjd1VGSnhBQlRRUjkzUQ=='
-password='SGFycm9nYXRlc0BAMTEy'
-client_secret='Qk4tZGhNUDA0aDloQVFCNlpYemZ1aTRrdTdmYVpR'
-postgrespw = 'cGFzc3dvcmQx'
+passwords = pd.read_csv(parentdir + '/encrypt.csv')
+redditClientId = passwords['redditClientId'][0]
+redditPassword= passwords['redditPassword'][0]
+redditClientSecret= passwords['redditClientSecret'][0]
+postgrespw = ['postgrespw'][0]
 
 
 
@@ -88,11 +95,11 @@ def scrape(reddit,subreddit,tag,limit):
 def scrapeMultipleData(subreddit,tagList,limit,**kwargs):
     # Creating a reddit crawler object - your own user name and password
     
-    reddit = praw.Reddit(client_id=base64.b64decode(clientId).decode("utf-8"),
-                        client_secret=base64.b64decode(client_secret).decode("utf-8"),
+    reddit = praw.Reddit(client_id=base64.b64decode(redditClientId).decode("utf-8"),
+                        redditClientSecret=base64.b64decode(redditClientSecret).decode("utf-8"),
                         user_agent='jamiescrapes',
                         username='JamieRan112',
-                        password=base64.b64decode(password).decode("utf-8"))
+                        password=base64.b64decode(redditPassword).decode("utf-8"))
     
     print(reddit.user.me())
     

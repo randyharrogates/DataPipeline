@@ -6,9 +6,18 @@ import os
 import glob
 from pathlib import Path
 import base64
+import sys
+import inspect
 
-postgrespw = 'cGFzc3dvcmQx'
-print(base64.b64encode(postgrespw.encode("utf-8")))
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir) 
+
+
+passwords = pd.read_csv(parentdir + '/encrypt.csv')
+postgrespw = passwords['postgrespw'][0]
+
+
 
 def search_by_keywords(keyword, start, end, tweet_limit):
     '''

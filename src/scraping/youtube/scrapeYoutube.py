@@ -9,9 +9,17 @@ import pandas as pd
 import glob
 from sqlalchemy import create_engine
 import base64
+import sys
+import inspect
 
-postgrespw = 'cGFzc3dvcmQx'
-API_KEY = 'QUl6YVN5Q0J0Rm5LZjBfaWk0VVJDSTJqVk9GbGNEeU1Wd1d1YWlF'
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir) 
+
+
+passwords = pd.read_csv(parentdir + '/encrypt.csv')
+postgrespw = passwords['postgrespw'][0]
+API_KEY = passwords['API_KEY'][0]
 
 
 def search_keywords(items, count):
