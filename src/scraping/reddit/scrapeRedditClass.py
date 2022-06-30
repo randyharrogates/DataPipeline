@@ -20,7 +20,7 @@ passwords = pd.read_csv(parentdir + '/encrypt.csv')
 redditClientId = passwords['redditClientId'][0]
 redditPassword= passwords['redditPassword'][0]
 redditClientSecret= passwords['redditClientSecret'][0]
-postgrespw = ['postgrespw'][0]
+postgrespw = passwords['postgrespw'][0]
 
 
 
@@ -70,7 +70,7 @@ class Scrape_subreddit:
             subset='title', keep="first")
         
         self.dataframe['body'] = self.dataframe['body'].replace(r'\n+', ' ', regex=True)
-        self.dataframe['body'] = self.dataframe['title'].replace(r'\n+', ' ', regex=True)
+        self.dataframe['title'] = self.dataframe['title'].replace(r'\n+', ' ', regex=True)
        
         return self.dataframe
 
@@ -95,7 +95,7 @@ def scrapeMultipleData(subreddit,tagList,limit,**kwargs):
     # Creating a reddit crawler object - your own user name and password
     
     reddit = praw.Reddit(client_id=base64.b64decode(redditClientId).decode("utf-8"),
-                        redditClientSecret=base64.b64decode(redditClientSecret).decode("utf-8"),
+                        client_secret=base64.b64decode(redditClientSecret).decode("utf-8"),
                         user_agent='jamiescrapes',
                         username='JamieRan112',
                         password=base64.b64decode(redditPassword).decode("utf-8"))
