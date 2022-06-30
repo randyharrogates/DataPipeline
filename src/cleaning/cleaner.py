@@ -9,6 +9,7 @@ import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
+
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir) 
@@ -55,7 +56,10 @@ def cleanReddit(df):
     df['title'] = df['title'].str.strip()
     df['body'] = df['body'].astype(str).replace('[^a-zA-Z]', ' ', regex=True)
     df['body'] = df['body'].str.strip()
+    df = df.reindex(columns= df.columns.tolist() + ['source_type'])
+    df['source_type']  = 'reddit'
     print(df.head())
+    return df
     
     
 def cleanTwitter(df):
@@ -69,13 +73,51 @@ def cleanTwitter(df):
     df = df.reindex(columns=['title'] + df.columns.tolist())
     print(df.head())
     
-    #change eyar to right format
+    #change year to right format
+    df['year'] = df['year'].astype(str).str[0:4]
+    print(df['year'])
+    
+    df = df.reindex(columns= df.columns.tolist() + ['source_type'])
+    df['source_type']  = 'twitter'
+    print(df.head())
+    
+    return df
+    
+    
+def cleanYoutube(df):
+    
+    df = df[['title', 'description', 'published_date']]
+    df = df.rename({'title':'title', 'description':'body', 'published_date': 'year'}, axis=1)
+    df['title'] = df['title'].astype(str).replace('[^a-zA-Z]', ' ', regex=True)
+    df['title'] = df['title'].str.strip()
+    df['body'] = df['body'].astype(str).replace('[^a-zA-Z]', ' ', regex=True)
+    df['body'] = df['body'].str.strip()
+    
+    #change year to right format
     df['year'] = df['year'].astype(str).str[0:4]
     print(df['year'])
     
     
+    df = df.reindex(columns= df.columns.tolist() + ['source_type'])
+    df['source_type'] = 'youtube'
+    print(df.head())
     
-# twitterDf = twitterDf[['content', 'date']]
-# youtubeDf = youtubeDf[['title', 'description', 'published_date']]
+    return df
 
-cleanTwitter(twitterDf)
+def getFInalDf(dfList):
+    pd.concat(dfList)
+
+def saveToDb(df, title):
+    #to save to postgres directly
+    engine = db.create_engine(f'postgresql://postgres:{base64.b64decode(postgrespw).decode("utf-8")}@localhost:5432/test')
+    df.to_sql(title, engine, if_exists='replace',index=False)
+    print(f'Dataframe {title} save to db as name {title}')
+
+
+redditDf = cleanReddit(redditDf)
+twitterDf = cleanTwitter(twitterDf)
+youtubeDf = cleanYoutube(youtubeDf)
+finalDf = pd.concat([redditDf, twitterDf, youtubeDf])
+# saveToDb(finalDf, 'words')
+
+
