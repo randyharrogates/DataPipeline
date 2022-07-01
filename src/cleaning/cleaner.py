@@ -67,18 +67,22 @@ def cleanTwitter(df):
     df = df.loc[df['lang'] == 'en' ]
     df = df[['content', 'date']]
     df = df.rename({'content':'body', 'date':'year'}, axis = 1)
-    print(df.head())
+    # print(df.head())
     
     #Add title column
     df = df.reindex(columns=['title'] + df.columns.tolist())
-    print(df.head())
+    # print(df.head())
     
     #change year to right format
     df['year'] = df['year'].astype(str).str[0:4]
-    print(df['year'])
+    # print(df['year'])
     
     df = df.reindex(columns= df.columns.tolist() + ['source_type'])
     df['source_type']  = 'twitter'
+    
+
+    df['body'] = df['body'].astype(str).replace('[^a-zA-Z]', ' ', regex=True)
+    df['body'] = df['body'].str.strip()
     print(df.head())
     
     return df
@@ -118,6 +122,6 @@ redditDf = cleanReddit(redditDf)
 twitterDf = cleanTwitter(twitterDf)
 youtubeDf = cleanYoutube(youtubeDf)
 finalDf = pd.concat([redditDf, twitterDf, youtubeDf])
-# saveToDb(finalDf, 'words')
+saveToDb(finalDf, 'words')
 
 
