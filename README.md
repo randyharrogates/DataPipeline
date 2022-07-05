@@ -24,4 +24,4 @@ Project is broken into stages:
 2. Data storage and cleaning
 3. Data visualizations and analysis + UI for visualizations
 4. Machine learning
-5. Create API for data usage
+
